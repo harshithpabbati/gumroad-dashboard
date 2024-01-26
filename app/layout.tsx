@@ -7,6 +7,7 @@ import { siteConfig } from '@/config/site';
 import { fontSans } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
 import { Header } from '@/components/Header';
+import { Providers } from '@/components/providers';
 import { TailwindIndicator } from '@/components/TailwindIndicator';
 
 export const metadata: Metadata = {
@@ -44,11 +45,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
             fontSans.variable
           )}
         >
-          <div className="relative flex min-h-svh flex-col">
-            <Header />
-            {children}
-          </div>
-          <TailwindIndicator />
+          <Providers>
+            <div className="relative flex min-h-svh flex-col">
+              <Header />
+              {children}
+            </div>
+            <TailwindIndicator />
+          </Providers>
         </body>
       </html>
     </>

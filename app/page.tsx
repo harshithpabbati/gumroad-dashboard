@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -6,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { SignIn } from '@/components/SignIn';
 
 export default function IndexPage() {
   return (
@@ -18,7 +18,7 @@ export default function IndexPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="px-4 py-8">
-          <Button className="w-full">Sign in with Gumroad</Button>
+          <SignIn />
         </CardContent>
       </Card>
     </section>

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 
 export function SignIn() {
   return (
-    <Button className="w-full" onClick={() => signIn()}>
+    <Button className="w-full" onClick={() => signIn('gumroad')}>
       Sign in with Gumroad
     </Button>
   );

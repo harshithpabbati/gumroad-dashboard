@@ -1,3 +1,7 @@
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
+
+import { authOptions } from '@/lib/authOptions';
 import {
   Card,
   CardContent,
@@ -7,7 +11,10 @@ import {
 } from '@/components/ui/card';
 import { SignIn } from '@/components/SignIn';
 
-export default function IndexPage() {
+export default async function IndexPage() {
+  const session = await getServerSession(authOptions);
+  if (session?.user) redirect('/dashboard');
+
   return (
     <section className="grid h-[calc(100svh-4rem)] flex-1 place-items-center">
       <Card className="min-w-[25rem]">

@@ -16,7 +16,7 @@ export function Shell({
         <h3 className="text-4xl font-medium">{title}</h3>
         {description && <p className="mt-2 text-sm">{description}</p>}
       </div>
-      {children}
+      <div className="p-4 md:p-12">{children}</div>
     </>
   );
 }

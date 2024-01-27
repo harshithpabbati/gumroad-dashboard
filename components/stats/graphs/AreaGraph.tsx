@@ -50,6 +50,7 @@ export function AreaGraph({ data }: Props) {
           dataKey="revenue"
           stroke="currentColor"
           fill="currentColor"
+          className="text-primary"
         />
         <Tooltip content={<CustomTooltip />} />
       </AreaChart>

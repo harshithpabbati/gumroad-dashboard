@@ -1,7 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Pie, PieChart, ResponsiveContainer, Sector } from 'recharts';
+import { Cell, Pie, PieChart, ResponsiveContainer, Sector } from 'recharts';
+
+const COLORS = [
+  '#ff90e8',
+  '#ffc900',
+  '#e2442f',
+  '#23a094',
+  '#98282a',
+  '#b23386',
+];
 
 const renderActiveShape = (props: any) => {
   const RADIAN = Math.PI / 180;
@@ -30,7 +39,7 @@ const renderActiveShape = (props: any) => {
 
   return (
     <g>
-      <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+      <text x={cx} y={cy} dy={8} textAnchor="middle" fill="currentColor">
         {payload.name}
       </text>
       <Sector
@@ -99,10 +108,14 @@ export function PieGraph({ data }: Props) {
           cy="50%"
           innerRadius={100}
           outerRadius={140}
-          fill="currentColor"
           dataKey="value"
+          fill="currentColor"
           onMouseEnter={onPieEnter}
-        />
+        >
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
       </PieChart>
     </ResponsiveContainer>
   );

@@ -5,16 +5,9 @@ export function calculateSalesVolume(
   sales: Sale[],
   {
     period = 'week',
-    generateFake = false,
     type = 'gross',
-  }: { period?: TimePeriod; generateFake?: boolean; type?: 'gross' | 'net' }
+  }: { period?: TimePeriod; type?: 'gross' | 'net' }
 ): { name: string; revenue: number }[] {
-  let newSalesData = sales;
-
-  if (generateFake) {
-    newSalesData = getFakeSales();
-  }
-
   const startDate = new Date();
   switch (period) {
     case 'month':
@@ -54,7 +47,7 @@ export function calculateSalesVolume(
     }
   });
 
-  newSalesData.forEach((sale) => {
+  sales.forEach((sale) => {
     const date = new Date(sale.created_at);
     if (date >= startDate && date <= currentDate) {
       let key;

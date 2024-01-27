@@ -14,11 +14,13 @@ import { Tooltip as CustomTooltip } from './Tooltip';
 interface Props {
   data: {
     name: string;
-    revenue: number;
+    grossRevenue: number;
+    netRevenue: number;
   }[];
+  dataKey: string;
 }
 
-export function AreaGraph({ data }: Props) {
+export function AreaGraph({ data, dataKey }: Props) {
   return (
     <ResponsiveContainer width="100%" height={350}>
       <AreaChart
@@ -47,7 +49,7 @@ export function AreaGraph({ data }: Props) {
         <Area
           fillOpacity={1}
           type="monotone"
-          dataKey="revenue"
+          dataKey={dataKey}
           stroke="currentColor"
           fill="currentColor"
           className="text-primary"

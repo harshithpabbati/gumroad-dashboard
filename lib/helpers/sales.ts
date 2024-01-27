@@ -3,15 +3,12 @@ import { getFakeSales } from '@/lib/helpers/fake';
 
 export function calculateSalesVolume(
   sales: Sale[],
-  {
-    period = 'week',
-    type = 'gross',
-  }: { period?: TimePeriod; type?: 'gross' | 'net' }
-): { name: string; revenue: number }[] {
+  period: TimePeriod = 'week'
+): { name: string; grossRevenue: number; netRevenue: number }[] {
   const startDate = new Date();
   switch (period) {
     case 'month':
-      startDate.setMonth(startDate.getMonth() - 12);
+      startDate.setMonth(startDate.getMonth() - 11);
       break;
     case 'week':
     default:
@@ -31,16 +28,19 @@ export function calculateSalesVolume(
     dates.push(new Date(d));
   }
 
-  const salesData: { [key: string]: number } = {};
+  const salesData: { [key: string]: { gross: number; net: number } } = {};
   dates.forEach((date) => {
     switch (period) {
       case 'week':
-        salesData[date.toLocaleDateString('en-US', { weekday: 'short' })] = 0;
+        salesData[date.toLocaleDateString('en-US', { weekday: 'short' })] = {
+          gross: 0,
+          net: 0,
+        };
         break;
       case 'month':
         salesData[
           date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' })
-        ] = 0;
+        ] = { gross: 0, net: 0 };
         break;
       default:
         break;
@@ -63,17 +63,16 @@ export function calculateSalesVolume(
           key = date.toLocaleDateString('en-US', { weekday: 'short' });
           break;
       }
-      salesData[key] +=
-        type === 'gross'
-          ? sale.price
-          : Math.round(sale.price - sale.gumroad_fee);
+      salesData[key].gross += sale.price;
+      salesData[key].net += Math.round(sale.price - sale.gumroad_fee);
     }
   });
 
   return Object.keys(salesData)
     .map((key) => ({
       name: key,
-      revenue: salesData[key],
+      grossRevenue: salesData[key].gross,
+      netRevenue: salesData[key].net,
     }))
     .reverse();
 }

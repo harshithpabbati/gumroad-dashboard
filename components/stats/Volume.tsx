@@ -18,6 +18,7 @@ import {
   SelectGroup,
   SelectItem,
   SelectLabel,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
@@ -25,25 +26,16 @@ import { AreaGraph } from '@/components/stats/graphs/AreaGraph';
 
 export function Volume({
   sales,
-  className = '',
+  className,
 }: {
   sales: Sale[];
   className?: string;
 }) {
   const [period, setPeriod] = useState<TimePeriod>('week');
-
-  const { gross, net } = useMemo(() => {
-    return {
-      gross: calculateSalesVolume(sales, {
-        period,
-        type: 'gross',
-      }),
-      net: calculateSalesVolume(sales, {
-        period,
-        type: 'net',
-      }),
-    };
-  }, [period, sales]);
+  const revenue = useMemo(
+    () => calculateSalesVolume(sales, period),
+    [period, sales]
+  );
 
   return (
     <div
@@ -70,6 +62,7 @@ export function Volume({
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Time Period</SelectLabel>
+                <SelectSeparator />
                 <SelectItem value="week">Weekly</SelectItem>
                 <SelectItem value="month">Monthly</SelectItem>
               </SelectGroup>
@@ -77,7 +70,7 @@ export function Volume({
           </Select>
         </CardHeader>
         <CardContent>
-          <AreaGraph data={gross} />
+          <AreaGraph data={revenue} dataKey="grossRevenue" />
         </CardContent>
       </Card>
       <Card className="w-full">
@@ -98,6 +91,7 @@ export function Volume({
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Time Period</SelectLabel>
+                <SelectSeparator />
                 <SelectItem value="week">Weekly</SelectItem>
                 <SelectItem value="month">Monthly</SelectItem>
               </SelectGroup>
@@ -105,7 +99,7 @@ export function Volume({
           </Select>
         </CardHeader>
         <CardContent>
-          <AreaGraph data={net} />
+          <AreaGraph data={revenue} dataKey="netRevenue" />
         </CardContent>
       </Card>
     </div>

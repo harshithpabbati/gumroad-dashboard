@@ -1,7 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Cell, Pie, PieChart, ResponsiveContainer, Sector } from 'recharts';
+import {
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Sector,
+} from 'recharts';
 
 const COLORS = [
   '#ff90e8',
@@ -116,6 +123,7 @@ export function PieGraph({ data }: Props) {
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
+        <Legend />
       </PieChart>
     </ResponsiveContainer>
   );

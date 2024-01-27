@@ -65,7 +65,9 @@ export interface SubscriptionSale extends OneTimeSale {
   free_trial_ended: any;
   free_trial_ends_on: any;
   recurring_charge: boolean;
-  variants: any;
+  variants: {
+    Tier: string;
+  };
   subscription_id: string;
 }
 

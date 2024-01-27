@@ -35,6 +35,7 @@ export function AreaGraph({ data }: Props) {
           tickFormatter={(value) => `$${value}`}
         />
         <Area
+          fillOpacity={1}
           type="monotone"
           dataKey="revenue"
           stroke="currentColor"

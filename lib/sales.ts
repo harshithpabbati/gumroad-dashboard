@@ -1,4 +1,4 @@
-import { Sale, TimePeriod } from '@/types/sale';
+import { Sale, SubscriptionSale, TimePeriod } from '@/types/sale';
 
 function generateFakeSales(): Sale[] {
   const sales: Sale[] = [];
@@ -162,4 +162,36 @@ export function calculateSalesVolume(
       revenue: salesData[key],
     }))
     .reverse();
+}
+
+export function getSubscribersDistribution(sales: SubscriptionSale[]) {
+  const distribution: Record<string, number> = {};
+
+  sales.forEach((item) => {
+    const tier = item.variants.Tier;
+    distribution[tier] = (distribution[tier] || 0) + 1;
+  });
+
+  return Object.entries(distribution).map(([name, value]) => ({ name, value }));
+}
+
+export function getMembershipMetrics(sales: SubscriptionSale[]) {
+  const metrics: Record<string, number> = {};
+
+  sales.forEach((item) => {
+    const duration = item.subscription_duration;
+    metrics[duration] = (metrics[duration] || 0) + 1;
+  });
+
+  return Object.entries(metrics).map(([name, value]) => ({ name, value }));
+}
+
+export function getCountryDistribution(sales: SubscriptionSale[]) {
+  const metrics: Record<string, number> = {};
+
+  sales.forEach(
+    (item) => (metrics[item.country] = (metrics[item.country] || 0) + 1)
+  );
+
+  return Object.entries(metrics).map(([name, value]) => ({ name, value }));
 }

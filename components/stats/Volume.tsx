@@ -37,12 +37,10 @@ export function Volume({
       gross: calculateSalesVolume(sales, {
         period,
         type: 'gross',
-        generateFake: true,
       }),
       net: calculateSalesVolume(sales, {
         period,
         type: 'net',
-        generateFake: true,
       }),
     };
   }, [period, sales]);
@@ -50,7 +48,7 @@ export function Volume({
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center gap-4 md:flex-row',
+        'flex flex-col items-center justify-center gap-4 lg:flex-row',
         className
       )}
     >

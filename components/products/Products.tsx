@@ -199,7 +199,7 @@ export function Products({ products }: { products: Product[] }) {
           </DropdownMenuContent>
         </DropdownMenu>
       </CardHeader>
-      <CardContent className="border-y px-0">
+      <CardContent className="border-y p-0">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -251,10 +251,10 @@ export function Products({ products }: { products: Product[] }) {
           </TableBody>
         </Table>
       </CardContent>
-      <CardFooter className="flex items-center justify-end p-4">
-        <div className="flex-1 text-sm text-muted-foreground">
+      <CardFooter className="flex items-center p-4">
+        <div className="text-sm text-muted-foreground">
           Displaying {table.getFilteredRowModel().rows.length} of{' '}
-          {table.getCoreRowModel().rows.length} row(s).
+          {table.getCoreRowModel().rows.length} row(s)
         </div>
       </CardFooter>
     </Card>

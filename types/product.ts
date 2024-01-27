@@ -1,6 +1,15 @@
 export interface Recurrence {}
 
-export interface Variant {}
+export interface Variant {
+  title: string;
+  options: {
+    name: string;
+    price_difference: number;
+    is_pay_what_you_want: boolean;
+    recurrence_prices: any;
+    url: string | null;
+  }[];
+}
 
 export interface Product {
   name: string;

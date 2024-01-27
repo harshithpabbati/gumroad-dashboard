@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { Activity, BookmarkX, DollarSign, Receipt } from 'lucide-react';
 
 import { Product } from '@/types/product';
 import { Sale, SubscriptionSale } from '@/types/sale';
@@ -11,108 +12,75 @@ export function Overview({
   product: Product;
   sales: Sale[];
 }) {
-  const activeSales = useMemo(
+  const activeSubscriptions = useMemo(
     () =>
       (sales as SubscriptionSale[]).filter(
-        (s) => !s.cancelled || !s.dead || !s.ended
+        (s) => !(s.cancelled || s.dead || s.ended)
       ),
     [sales]
   );
+  const currentMRR = useMemo(
+    () => activeSubscriptions.reduce((acc: number, sub) => acc + sub.price, 0),
+    [activeSubscriptions]
+  );
+  const churnRate = useMemo(() => {
+    const cancelledSubscriptions = (sales as SubscriptionSale[]).filter(
+      (s) => s.cancelled || s.dead || s.ended
+    );
+    return Math.round(
+      (cancelledSubscriptions.length / activeSubscriptions.length) * 100
+    );
+  }, [activeSubscriptions, sales]);
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            className="size-4 text-muted-foreground"
-          >
-            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-          </svg>
+          <DollarSign className="size-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">${product.sales_usd_cents}</div>
           <p className="text-xs text-muted-foreground">
-            Sum of all sales income.
+            Sum of all sales income
           </p>
         </CardContent>
       </Card>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Subscriptions</CardTitle>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            className="size-4 text-muted-foreground"
-          >
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-            <circle cx="9" cy="7" r="4" />
-            <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-          </svg>
+          <CardTitle className="text-sm font-medium">Current MRR</CardTitle>
+          <Receipt className="size-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{product.sales_count}</div>
+          <div className="text-2xl font-bold">${currentMRR}</div>
           <p className="text-xs text-muted-foreground">
-            Recurring payments by customer
+            Current monthly subscription revenue.
           </p>
         </CardContent>
       </Card>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Sales</CardTitle>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            className="size-4 text-muted-foreground"
-          >
-            <rect width="20" height="14" x="2" y="5" rx="2" />
-            <path d="M2 10h20" />
-          </svg>
+          <CardTitle className="text-sm font-medium">
+            Active subscriptions
+          </CardTitle>
+          <Activity className="size-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{product.sales_count}</div>
-          <p className="text-xs text-muted-foreground">
-            Cumulative number of products
-          </p>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Active Now</CardTitle>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            className="size-4 text-muted-foreground"
-          >
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-          </svg>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{activeSales.length}</div>
+          <div className="text-2xl font-bold">{activeSubscriptions.length}</div>
           <p className="text-xs text-muted-foreground">
             Current number of ongoing subscriptions
+          </p>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Churn rate</CardTitle>
+          <BookmarkX className="size-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{churnRate}%</div>
+          <p className="text-xs text-muted-foreground">
+            Percentage of customers who cancelled their subscriptions
           </p>
         </CardContent>
       </Card>

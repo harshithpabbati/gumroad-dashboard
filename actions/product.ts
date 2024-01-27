@@ -18,3 +18,16 @@ export async function getProducts(): Promise<{
   });
   return await response.json();
 }
+
+export async function getProduct(
+  id: string
+): Promise<{ success: boolean; product: Product }> {
+  const session = await getServerSession(authOptions);
+
+  const response = await fetch(`https://api.gumroad.com/v2/products/${id}`, {
+    headers: {
+      Authorization: `Bearer ${session?.access_token}`,
+    },
+  });
+  return await response.json();
+}

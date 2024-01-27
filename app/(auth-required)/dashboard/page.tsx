@@ -1,4 +1,4 @@
-import { getProducts } from '@/actions/products';
+import { getProducts } from '@/actions/product';
 
 import { Products } from '@/components/products';
 import { Shell } from '@/components/Shell';

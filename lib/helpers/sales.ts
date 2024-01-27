@@ -17,13 +17,12 @@ export function calculateSalesVolume(
 
   const startDate = new Date();
   switch (period) {
-    case 'week':
-      startDate.setDate(startDate.getDate() - 7 * 7);
-      break;
     case 'month':
       startDate.setMonth(startDate.getMonth() - 12);
       break;
+    case 'week':
     default:
+      startDate.setDate(startDate.getDate() - 7);
       break;
   }
 

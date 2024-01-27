@@ -7,8 +7,7 @@ interface Props {
   sales: Sale[];
 }
 export function Stats({ product, sales }: Props) {
-  if (product.is_tiered_membership)
-    return <SubscriptionStats product={product} sales={sales} />;
+  if (product.is_tiered_membership) return <SubscriptionStats sales={sales} />;
   return (
     <div>
       {sales.map((sale) => (

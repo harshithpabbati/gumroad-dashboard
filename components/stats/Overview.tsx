@@ -1,17 +1,14 @@
 import { useMemo } from 'react';
 import { Activity, BookmarkX, DollarSign, Receipt } from 'lucide-react';
 
-import { Product } from '@/types/product';
 import { Sale, SubscriptionSale } from '@/types/sale';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export function Overview({
-  product,
-  sales,
-}: {
-  product: Product;
-  sales: Sale[];
-}) {
+export function Overview({ sales }: { sales: Sale[] }) {
+  const totalRevenue = useMemo(
+    () => sales.reduce((acc: number, sub) => acc + sub.price, 0),
+    [sales]
+  );
   const activeSubscriptions = useMemo(
     () =>
       (sales as SubscriptionSale[]).filter(
@@ -41,7 +38,7 @@ export function Overview({
           <DollarSign className="size-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">${product.sales_usd_cents}</div>
+          <div className="text-2xl font-bold">${totalRevenue}</div>
           <p className="text-xs text-muted-foreground">
             Sum of all sales income
           </p>

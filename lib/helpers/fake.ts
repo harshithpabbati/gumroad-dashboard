@@ -1,10 +1,7 @@
 import { Product, Variant } from '@/types/product';
 import { Sale, SubscriptionSale } from '@/types/sale';
 
-export function getFakeProduct(sales: Sale[]): Product {
-  const currentMRR = (sales as SubscriptionSale[])
-    .filter((s) => !(s.cancelled || s.dead || s.ended))
-    .reduce((acc: number, sub) => acc + sub.price, 0);
+export function getFakeProduct(): Product {
   const product: Product = {
     name: 'Fake Product',
     preview_url: null,
@@ -33,7 +30,7 @@ export function getFakeProduct(sales: Sale[]): Product {
     variants: [],
     custom_delivery_url: {},
     sales_count: Math.floor(Math.random() * 1000), // Random sales count
-    sales_usd_cents: currentMRR + Math.floor(Math.random() * 10000), // Random sales in USD cents
+    sales_usd_cents: Math.floor(Math.random() * 10000), // Random sales in USD cents
   };
 
   // Generate random number of variants

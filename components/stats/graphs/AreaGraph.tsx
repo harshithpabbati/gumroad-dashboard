@@ -9,6 +9,8 @@ import {
   YAxis,
 } from 'recharts';
 
+import { Tooltip as CustomTooltip } from './Tooltip';
+
 interface Props {
   data: {
     name: string;
@@ -19,16 +21,24 @@ interface Props {
 export function AreaGraph({ data }: Props) {
   return (
     <ResponsiveContainer width="100%" height={350}>
-      <AreaChart data={data}>
+      <AreaChart
+        margin={{
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+        }}
+        data={data}
+      >
         <XAxis
-          stroke="#888888"
+          stroke="currentColor"
           fontSize={12}
           tickLine={false}
           axisLine={false}
           dataKey="name"
         />
         <YAxis
-          stroke="#888888"
+          stroke="currentColor"
           fontSize={12}
           tickLine={false}
           axisLine={false}
@@ -41,7 +51,7 @@ export function AreaGraph({ data }: Props) {
           stroke="currentColor"
           fill="currentColor"
         />
-        <Tooltip />
+        <Tooltip content={<CustomTooltip />} />
       </AreaChart>
     </ResponsiveContainer>
   );

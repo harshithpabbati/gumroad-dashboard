@@ -83,7 +83,14 @@ export function PieGraph({ data }: Props) {
 
   return (
     <ResponsiveContainer width="100%" height={400}>
-      <PieChart>
+      <PieChart
+        margin={{
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+        }}
+      >
         <Pie
           activeIndex={activeIndex}
           activeShape={renderActiveShape}

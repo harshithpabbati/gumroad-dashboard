@@ -1,7 +1,7 @@
 import { Ban } from 'lucide-react';
 
 import { Sale, SubscriptionSale } from '@/types/sale';
-import { getMembershipMetrics } from '@/lib/sales';
+import { getMembershipMetrics } from '@/lib/helpers/sales';
 import {
   Card,
   CardContent,

@@ -28,10 +28,10 @@ export function Overview({
       (s) => s.cancelled || s.dead || s.ended
     );
     const value = Math.round(
-      (cancelledSubscriptions.length / activeSubscriptions.length) * 100
+      (cancelledSubscriptions.length / sales.length) * 100
     );
     return isNaN(value) ? 0 : value;
-  }, [activeSubscriptions, sales]);
+  }, [sales]);
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

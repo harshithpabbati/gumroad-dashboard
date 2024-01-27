@@ -3,7 +3,7 @@
 import { Ban } from 'lucide-react';
 
 import { Sale, SubscriptionSale } from '@/types/sale';
-import { getCountryDistribution } from '@/lib/sales';
+import { getCountryDistribution } from '@/lib/helpers/sales';
 import {
   Card,
   CardContent,

@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 
 import { Sale, TimePeriod } from '@/types/sale';
-import { calculateSalesVolume } from '@/lib/sales';
+import { calculateSalesVolume } from '@/lib/helpers/sales';
 import { cn } from '@/lib/utils';
 import {
   Card,

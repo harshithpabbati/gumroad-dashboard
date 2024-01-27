@@ -5,13 +5,8 @@ import { getServerSession } from 'next-auth';
 import { Sale } from '@/types/sale';
 import { authOptions } from '@/lib/authOptions';
 
-interface Options {
-  period?: 'day' | 'week' | 'month' | 'year';
-}
-
 export async function getSales(
-  productId: string,
-  options?: Options
+  productId: string
 ): Promise<{ success: boolean; sales: Sale[] }> {
   const session = await getServerSession(authOptions);
 

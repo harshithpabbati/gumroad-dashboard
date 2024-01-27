@@ -61,9 +61,9 @@ const renderActiveShape = (props: any) => {
         x={ex + (cos >= 0 ? 1 : -1) * 12}
         y={ey}
         textAnchor={textAnchor}
-        fill="#333"
+        fill="currentColor"
       >
-        {(percent * 100).toFixed(2)}% ({value})
+        {(percent * 100).toFixed(2)}%
       </text>
     </g>
   );

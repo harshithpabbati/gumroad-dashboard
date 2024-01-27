@@ -27,9 +27,10 @@ export function Overview({
     const cancelledSubscriptions = (sales as SubscriptionSale[]).filter(
       (s) => s.cancelled || s.dead || s.ended
     );
-    return Math.round(
+    const value = Math.round(
       (cancelledSubscriptions.length / activeSubscriptions.length) * 100
     );
+    return isNaN(value) ? 0 : value;
   }, [activeSubscriptions, sales]);
 
   return (

@@ -30,7 +30,7 @@ export function MembershipMetrics({ sales }: Props) {
       <CardContent>
         {metrics.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-4 px-4 py-12">
-            <div className="rounded-full bg-muted p-4">
+            <div className="rounded-full bg-background p-4">
               <Ban />
             </div>
             <h3 className="font-medium">

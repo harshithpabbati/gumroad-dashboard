@@ -65,9 +65,9 @@ export const columns: ColumnDef<Product>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="flex flex-col px-4">
-        <p className="font-medium">{row.getValue('name')}</p>
-        <p className="text-sm text-muted-foreground underline">
+      <div className="flex flex-col">
+        <p className="text-lg font-semibold">{row.getValue('name')}</p>
+        <p className="text-xs text-foreground underline">
           {row.original.short_url}
         </p>
       </div>
@@ -229,7 +229,7 @@ export function Products({ products }: { products: Product[] }) {
                   className="cursor-pointer"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell className="p-4" key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -252,7 +252,7 @@ export function Products({ products }: { products: Product[] }) {
         </Table>
       </CardContent>
       <CardFooter className="flex items-center p-4">
-        <div className="text-sm text-muted-foreground">
+        <div className="text-sm text-foreground">
           Displaying {table.getFilteredRowModel().rows.length} of{' '}
           {table.getCoreRowModel().rows.length} row(s)
         </div>

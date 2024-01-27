@@ -12,17 +12,24 @@ import {
 import { Tooltip as CustomTooltip } from './Tooltip';
 
 interface Props {
-  data: {
-    name: string;
-    grossRevenue: number;
-    netRevenue: number;
-  }[];
+  data: Record<string, string | number>[];
   dataKey: string;
+  hideAxis?: boolean;
+  height?: string | number;
+  prefix?: string;
+  suffix?: string;
 }
 
-export function AreaGraph({ data, dataKey }: Props) {
+export function AreaGraph({
+  data,
+  dataKey,
+  hideAxis = false,
+  height = 350,
+  prefix,
+  suffix,
+}: Props) {
   return (
-    <ResponsiveContainer width="100%" height={350}>
+    <ResponsiveContainer width="100%" height={height}>
       <AreaChart
         margin={{
           top: 0,
@@ -37,6 +44,7 @@ export function AreaGraph({ data, dataKey }: Props) {
           fontSize={12}
           tickLine={false}
           axisLine={false}
+          hide={hideAxis}
           dataKey="name"
         />
         <YAxis
@@ -44,6 +52,7 @@ export function AreaGraph({ data, dataKey }: Props) {
           fontSize={12}
           tickLine={false}
           axisLine={false}
+          hide={hideAxis}
           tickFormatter={(value) => `$${value}`}
         />
         <Area
@@ -54,7 +63,7 @@ export function AreaGraph({ data, dataKey }: Props) {
           fill="currentColor"
           className="text-primary"
         />
-        <Tooltip content={<CustomTooltip />} />
+        <Tooltip content={<CustomTooltip prefix={prefix} suffix={suffix} />} />
       </AreaChart>
     </ResponsiveContainer>
   );

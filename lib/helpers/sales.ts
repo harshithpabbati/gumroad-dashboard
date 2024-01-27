@@ -16,7 +16,7 @@ export function calculateSalesVolume(
       break;
   }
 
-  const dates: Date[] = [];
+  let dates: Date[] = [];
   const currentDate = new Date();
   for (
     let d = new Date(currentDate);
@@ -27,6 +27,7 @@ export function calculateSalesVolume(
   ) {
     dates.push(new Date(d));
   }
+  dates = dates.reverse();
 
   const salesData: { [key: string]: { gross: number; net: number } } = {};
   dates.forEach((date) => {
@@ -68,13 +69,180 @@ export function calculateSalesVolume(
     }
   });
 
-  return Object.keys(salesData)
-    .map((key) => ({
-      name: key,
-      grossRevenue: salesData[key].gross,
-      netRevenue: salesData[key].net,
-    }))
-    .reverse();
+  return Object.keys(salesData).map((key) => ({
+    name: key,
+    grossRevenue: salesData[key].gross,
+    netRevenue: salesData[key].net,
+  }));
+}
+
+export function calculateTotalRevenue(
+  sales: Sale[]
+): { name: string; revenue: number }[] {
+  const startDate = new Date();
+  startDate.setMonth(startDate.getMonth() - 11);
+
+  let dates: Date[] = [];
+  const currentDate = new Date();
+  for (
+    let d = new Date(currentDate);
+    d >= startDate;
+    d.setMonth(d.getMonth() - 1)
+  ) {
+    dates.push(new Date(d));
+  }
+  dates = dates.reverse();
+
+  const salesData: { [key: string]: number } = {};
+  let totalRevenue = sales
+    .filter((sale) => {
+      const saleDate = new Date(sale.created_at);
+      return (
+        saleDate.getMonth() < startDate.getMonth() &&
+        saleDate.getFullYear() < startDate.getFullYear()
+      );
+    })
+    .reduce((total, sale) => total + sale.price, 0);
+  dates.forEach((date) => {
+    const thisMonthRevenue = sales
+      .filter((sale) => {
+        const saleDate = new Date(sale.created_at);
+        return (
+          saleDate.getMonth() === date.getMonth() &&
+          saleDate.getFullYear() === date.getFullYear()
+        );
+      })
+      .reduce((total, sale) => total + sale.price, 0);
+    salesData[
+      date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' })
+    ] = totalRevenue + thisMonthRevenue;
+    totalRevenue += thisMonthRevenue;
+  });
+
+  return Object.keys(salesData).map((key) => ({
+    name: key,
+    revenue: salesData[key],
+  }));
+}
+
+export function calculateMRR(
+  sales: Sale[]
+): { name: string; revenue: number }[] {
+  const startDate = new Date();
+  startDate.setMonth(startDate.getMonth() - 11);
+
+  let dates: Date[] = [];
+  const currentDate = new Date();
+  for (
+    let d = new Date(currentDate);
+    d >= startDate;
+    d.setMonth(d.getMonth() - 1)
+  ) {
+    dates.push(new Date(d));
+  }
+  dates = dates.reverse();
+
+  const salesData: { [key: string]: number } = {};
+  dates.forEach((date) => {
+    salesData[
+      date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' })
+    ] = (sales as SubscriptionSale[])
+      .filter((s) => !(s.cancelled || s.dead || s.ended))
+      .filter((sale) => {
+        const saleDate = new Date(sale.created_at);
+        return (
+          saleDate.getMonth() === date.getMonth() &&
+          saleDate.getFullYear() === date.getFullYear()
+        );
+      })
+      .reduce((total, sale) => total + sale.price, 0);
+  });
+
+  return Object.keys(salesData).map((key) => ({
+    name: key,
+    revenue: salesData[key],
+  }));
+}
+
+export function calculateSubscriptions(
+  sales: Sale[]
+): { name: string; subscriptions: number }[] {
+  const startDate = new Date();
+  startDate.setMonth(startDate.getMonth() - 11);
+
+  let dates: Date[] = [];
+  const currentDate = new Date();
+  for (
+    let d = new Date(currentDate);
+    d >= startDate;
+    d.setMonth(d.getMonth() - 1)
+  ) {
+    dates.push(new Date(d));
+  }
+  dates = dates.reverse();
+
+  const salesData: { [key: string]: number } = {};
+  dates.forEach((date) => {
+    salesData[
+      date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' })
+    ] = (sales as SubscriptionSale[])
+      .filter((s) => !(s.cancelled || s.dead || s.ended))
+      .filter((sale) => {
+        const saleDate = new Date(sale.created_at);
+        return (
+          saleDate.getMonth() === date.getMonth() &&
+          saleDate.getFullYear() === date.getFullYear()
+        );
+      }).length;
+  });
+
+  return Object.keys(salesData).map((key) => ({
+    name: key,
+    subscriptions: salesData[key],
+  }));
+}
+
+export function calculateChurn(
+  sales: Sale[]
+): { name: string; churn: number }[] {
+  const startDate = new Date();
+  startDate.setMonth(startDate.getMonth() - 11);
+
+  let dates: Date[] = [];
+  const currentDate = new Date();
+  for (
+    let d = new Date(currentDate);
+    d >= startDate;
+    d.setMonth(d.getMonth() - 1)
+  ) {
+    dates.push(new Date(d));
+  }
+  dates = dates.reverse();
+
+  const salesData: { [key: string]: number } = {};
+  dates.forEach((date) => {
+    const thisMonthSales = (sales as SubscriptionSale[]).filter((sale) => {
+      const saleDate = new Date(sale.created_at);
+      return (
+        saleDate.getMonth() === date.getMonth() &&
+        saleDate.getFullYear() === date.getFullYear()
+      );
+    });
+    const cancelledSubscriptions = thisMonthSales.filter(
+      (s) => s.cancelled || s.dead || s.ended
+    );
+    const churnRate = Math.round(
+      (cancelledSubscriptions.length / thisMonthSales.length) * 100
+    );
+    salesData[
+      date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' })
+    ] = isNaN(churnRate) ? 0 : churnRate;
+  });
+
+  return Object.keys(salesData).map((key) => ({
+    name: key,
+    churn: salesData[key],
+  }));
 }
 
 export function getSubscribersDistribution(sales: SubscriptionSale[]) {

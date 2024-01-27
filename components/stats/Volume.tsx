@@ -70,7 +70,7 @@ export function Volume({
           </Select>
         </CardHeader>
         <CardContent>
-          <AreaGraph data={revenue} dataKey="grossRevenue" />
+          <AreaGraph prefix="$" data={revenue} dataKey="grossRevenue" />
         </CardContent>
       </Card>
       <Card className="w-full">
@@ -99,7 +99,7 @@ export function Volume({
           </Select>
         </CardHeader>
         <CardContent>
-          <AreaGraph data={revenue} dataKey="netRevenue" />
+          <AreaGraph prefix="$" data={revenue} dataKey="netRevenue" />
         </CardContent>
       </Card>
     </div>

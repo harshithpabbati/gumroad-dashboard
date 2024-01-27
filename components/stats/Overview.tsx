@@ -2,7 +2,22 @@ import { useMemo } from 'react';
 import { Activity, BookmarkX, DollarSign, Receipt } from 'lucide-react';
 
 import { Sale, SubscriptionSale } from '@/types/sale';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  calculateChurn,
+  calculateMRR,
+  calculateSubscriptions,
+  calculateTotalRevenue,
+} from '@/lib/helpers/sales';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { AreaGraph } from '@/components/stats/graphs/AreaGraph';
+import { BarGraph } from '@/components/stats/graphs/BarGraph';
+import { LineGraph } from '@/components/stats/graphs/LineGraph';
 
 export function Overview({ sales }: { sales: Sale[] }) {
   const totalRevenue = useMemo(
@@ -17,7 +32,17 @@ export function Overview({ sales }: { sales: Sale[] }) {
     [sales]
   );
   const currentMRR = useMemo(
-    () => activeSubscriptions.reduce((acc: number, sub) => acc + sub.price, 0),
+    () =>
+      activeSubscriptions
+        .filter((s) => {
+          const date = new Date();
+          const saleDate = new Date(s.created_at);
+          return (
+            saleDate.getMonth() === date.getMonth() &&
+            saleDate.getFullYear() === date.getFullYear()
+          );
+        })
+        .reduce((acc: number, sub) => acc + sub.price, 0),
     [activeSubscriptions]
   );
   const churnRate = useMemo(() => {
@@ -30,56 +55,74 @@ export function Overview({ sales }: { sales: Sale[] }) {
     return isNaN(value) ? 0 : value;
   }, [sales]);
 
+  const revenue = useMemo(() => calculateTotalRevenue(sales), [sales]);
+  const mrr = useMemo(() => calculateMRR(sales), [sales]);
+  const subscriptions = useMemo(() => calculateSubscriptions(sales), [sales]);
+  const churn = useMemo(() => calculateChurn(sales), [sales]);
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-          <DollarSign className="size-4 text-muted-foreground" />
+        <CardHeader>
+          <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+            <DollarSign className="size-4 text-muted-foreground" />
+          </div>
+          <CardDescription className="text-2xl font-bold">
+            ${totalRevenue}
+          </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">${totalRevenue}</div>
-          <p className="text-xs text-muted-foreground">
-            Sum of all sales income
-          </p>
+        <CardContent className="h-[80px]">
+          <LineGraph data={revenue} dataKey="revenue" prefix="$" />
         </CardContent>
       </Card>
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Current MRR</CardTitle>
-          <Receipt className="size-4 text-muted-foreground" />
+        <CardHeader>
+          <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Current MRR</CardTitle>
+            <Receipt className="size-4 text-muted-foreground" />
+          </div>
+          <CardDescription className="text-2xl font-bold">
+            ${currentMRR}
+          </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">${currentMRR}</div>
-          <p className="text-xs text-muted-foreground">
-            Current monthly subscription revenue.
-          </p>
+        <CardContent className="h-[80px]">
+          <BarGraph data={mrr} prefix="$" />
         </CardContent>
       </Card>
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">
-            Active subscriptions
-          </CardTitle>
-          <Activity className="size-4 text-muted-foreground" />
+        <CardHeader>
+          <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Active subscriptions
+            </CardTitle>
+            <Activity className="size-4 text-muted-foreground" />
+          </div>
+          <CardDescription className="text-2xl font-bold">
+            {activeSubscriptions.length}
+          </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{activeSubscriptions.length}</div>
-          <p className="text-xs text-muted-foreground">
-            Current number of ongoing subscriptions
-          </p>
+        <CardContent className="h-[80px]">
+          <AreaGraph
+            data={subscriptions}
+            dataKey="subscriptions"
+            height="100%"
+            hideAxis
+          />
         </CardContent>
       </Card>
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Churn rate</CardTitle>
-          <BookmarkX className="size-4 text-muted-foreground" />
+        <CardHeader>
+          <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Churn rate</CardTitle>
+            <BookmarkX className="size-4 text-muted-foreground" />
+          </div>
+          <CardDescription className="text-2xl font-bold">
+            {churnRate}%
+          </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{churnRate}%</div>
-          <p className="text-xs text-muted-foreground">
-            Percentage of customers who cancelled their subscriptions
-          </p>
+        <CardContent className="h-[80px]">
+          <LineGraph suffix="%" data={churn} dataKey="churn" />
         </CardContent>
       </Card>
     </div>

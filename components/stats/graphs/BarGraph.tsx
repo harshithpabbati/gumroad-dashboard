@@ -1,8 +1,8 @@
 'use client';
 
 import {
-  Line,
-  LineChart,
+  Bar,
+  BarChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -12,16 +12,18 @@ import {
 import { Tooltip as CustomTooltip } from '@/components/stats/graphs/Tooltip';
 
 interface Props {
-  data: Record<string, string | number>[];
-  dataKey: string;
+  data: {
+    name: string;
+    revenue: number;
+  }[];
   prefix?: string;
   suffix?: string;
 }
 
-export function LineGraph({ data, dataKey, prefix, suffix }: Props) {
+export function BarGraph({ data, prefix, suffix }: Props) {
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <LineChart
+      <BarChart
         margin={{
           top: 0,
           bottom: 0,
@@ -32,20 +34,16 @@ export function LineGraph({ data, dataKey, prefix, suffix }: Props) {
       >
         <XAxis hide dataKey="name" />
         <YAxis hide />
-        <Line
+        <Bar
           type="monotone"
           strokeWidth={2}
-          dataKey={dataKey}
+          dataKey="revenue"
           stroke="currentColor"
           fill="currentColor"
-          activeDot={{
-            r: 6,
-            style: { fill: 'currentColor', opacity: 0.25 },
-          }}
           className="text-primary"
         />
         <Tooltip content={<CustomTooltip prefix={prefix} suffix={suffix} />} />
-      </LineChart>
+      </BarChart>
     </ResponsiveContainer>
   );
 }

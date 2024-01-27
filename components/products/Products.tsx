@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
   ColumnDef,
@@ -15,7 +14,13 @@ import {
   useReactTable,
   VisibilityState,
 } from '@tanstack/react-table';
-import { ArrowDownAZ, ArrowUpAZ, ChevronDown } from 'lucide-react';
+import {
+  ArrowDownAZ,
+  ArrowUpAZ,
+  CheckIcon,
+  ChevronDown,
+  XIcon,
+} from 'lucide-react';
 
 import { Product } from '@/types/product';
 import { Button } from '@/components/ui/button';
@@ -74,17 +79,26 @@ export const columns: ColumnDef<Product>[] = [
     cell: ({ row }) => <div>{row.getValue('custom_summary')}</div>,
   },
   {
-    accessorKey: 'sales_count',
-    header: () => <div className="text-center">Sales</div>,
+    accessorKey: 'is_tiered_membership',
+    header: () => <div>Type</div>,
     cell: ({ row }) => (
-      <div className="text-center font-medium">
-        {row.getValue('sales_count') ?? 'Summary not found'}
+      <div>
+        {row.getValue('is_tiered_membership')
+          ? 'Subscription'
+          : 'One-time payment'}
       </div>
     ),
   },
   {
+    accessorKey: 'sales_count',
+    header: () => <div>Sales</div>,
+    cell: ({ row }) => (
+      <div>{row.getValue('sales_count') ?? 'Summary not found'}</div>
+    ),
+  },
+  {
     accessorKey: 'sales_usd_cents',
-    header: () => <div className="text-center">Revenue</div>,
+    header: () => <div>Revenue</div>,
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue('sales_usd_cents'));
 
@@ -93,29 +107,30 @@ export const columns: ColumnDef<Product>[] = [
         currency: 'USD',
       }).format(amount);
 
-      return <div className="text-center font-medium">{formatted}</div>;
+      return <div>{formatted}</div>;
     },
   },
   {
-    accessorKey: 'price',
-    header: () => <div className="text-center">Price</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue('price'));
-
-      const formatted = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: row.original.currency,
-      }).format(amount);
-
-      return <div className="text-center font-medium">{formatted}</div>;
-    },
+    accessorKey: 'formatted_price',
+    header: () => <div>Price</div>,
+    cell: ({ row }) => <div>{row.getValue('formatted_price')}</div>,
   },
   {
     accessorKey: 'published',
-    header: () => <div className="text-center">Published</div>,
+    header: () => <div>Published</div>,
     cell: ({ row }) => (
-      <div className="text-center">
-        {row.getValue('published') ? 'Yes' : 'No'}
+      <div className="flex items-center">
+        {row.getValue('published') ? (
+          <>
+            <CheckIcon className="mr-1 size-4" />
+            Yes
+          </>
+        ) : (
+          <>
+            <XIcon className="mr-1 size-4" />
+            No
+          </>
+        )}
       </div>
     ),
   },
@@ -145,7 +160,7 @@ export function Products({ products }: { products: Product[] }) {
   });
 
   return (
-    <Card className="w-full rounded shadow-none">
+    <Card className="w-full rounded">
       <CardHeader className="flex flex-col items-center p-4 md:flex-row">
         <Input
           placeholder="Filter by product"

@@ -57,21 +57,25 @@ export function calculateSalesVolume(
 
   newSalesData.forEach((sale) => {
     const date = new Date(sale.created_at);
-    let key;
-    switch (period) {
-      case 'month':
-        key = date.toLocaleDateString('en-US', {
-          month: 'short',
-          year: '2-digit',
-        });
-        break;
-      case 'week':
-      default:
-        key = date.toLocaleDateString('en-US', { weekday: 'short' });
-        break;
+    if (date >= startDate && date <= currentDate) {
+      let key;
+      switch (period) {
+        case 'month':
+          key = date.toLocaleDateString('en-US', {
+            month: 'short',
+            year: '2-digit',
+          });
+          break;
+        case 'week':
+        default:
+          key = date.toLocaleDateString('en-US', { weekday: 'short' });
+          break;
+      }
+      salesData[key] +=
+        type === 'gross'
+          ? sale.price
+          : Math.round(sale.price - sale.gumroad_fee);
     }
-    salesData[key] +=
-      type === 'gross' ? sale.price : Math.round(sale.price - sale.gumroad_fee);
   });
 
   return Object.keys(salesData)

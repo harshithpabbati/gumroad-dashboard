@@ -2,8 +2,8 @@
 
 import { Ban } from 'lucide-react';
 
-import { Sale, SubscriptionSale } from '@/types/sale';
-import { getSubscribersDistribution } from '@/lib/helpers/sales';
+import { Sale } from '@/types/sale';
+import { getAffiliateDistribution } from '@/lib/helpers/sales';
 import {
   Card,
   CardContent,
@@ -17,16 +17,16 @@ interface Props {
   sales: Sale[];
 }
 
-export function SubscribersDistribution({ sales }: Props) {
-  const distribution = getSubscribersDistribution(sales as SubscriptionSale[]);
+export function AffiliateDistribution({ sales }: Props) {
+  const distribution = getAffiliateDistribution(sales);
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Subscription Tier Breakdown</CardTitle>
+        <CardTitle>Affiliate distribution</CardTitle>
         <CardDescription>
-          Examine subscriber distribution among different tiers to optimize
-          pricing and content offerings.
+          Assess affiliate-driven purchase percentages to gauge their impact on
+          sales
         </CardDescription>
       </CardHeader>
       <CardContent className="px-0">
@@ -36,7 +36,7 @@ export function SubscribersDistribution({ sales }: Props) {
               <Ban />
             </div>
             <h3 className="font-medium">
-              Subscription Distributions are not available
+              Affiliate distribution is not available
             </h3>
             <p className="text-center text-sm text-muted-foreground">
               There are currently no distributions to display. Please check back

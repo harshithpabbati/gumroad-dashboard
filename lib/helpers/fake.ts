@@ -1,16 +1,16 @@
 import { Product, Variant } from '@/types/product';
 import { Sale, SubscriptionSale } from '@/types/sale';
 
-export function getFakeProduct(): Product {
+export function getFakeProduct(isSubscription: boolean = true): Product {
   const product: Product = {
-    name: 'Fake Product',
+    name: `Fake ${isSubscription ? 'Subscription' : 'Product'}`,
     preview_url: null,
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     customizable_price: Math.random() > 0.5,
     require_shipping: Math.random() > 0.5,
     custom_receipt: 'Fake custom receipt',
     custom_permalink: 'fake_product',
-    subscription_duration: Math.random() > 0.5 ? 'monthly' : 'annual',
+    subscription_duration: null,
     id: Math.random().toString(36).substr(2, 10),
     url: null,
     price: Math.floor(Math.random() * 100), // Random price between 0 and 99
@@ -24,8 +24,8 @@ export function getFakeProduct(): Product {
     max_purchase_count: {},
     deleted: false,
     custom_fields: [],
-    custom_summary: 'Fake custom summary',
-    is_tiered_membership: true,
+    custom_summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    is_tiered_membership: isSubscription,
     recurrences: [],
     variants: [],
     custom_delivery_url: {},
@@ -136,6 +136,13 @@ export function getFakeSales(): Sale[] {
       free_trial_ends_on: null,
       recurring_charge: false,
       quantity: 1,
+      affiliate:
+        Math.random() > 0.55
+          ? null
+          : {
+              email: 'some@email.com',
+              amount: 2.5,
+            },
     });
   }
 

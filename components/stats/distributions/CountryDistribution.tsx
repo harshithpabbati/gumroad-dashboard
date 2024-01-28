@@ -29,7 +29,7 @@ export function CountryDistribution({ sales }: Props) {
           geographic engagement.
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-0">
         {distribution.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-4 px-4 py-12">
             <div className="rounded-full bg-background p-4">
@@ -38,7 +38,7 @@ export function CountryDistribution({ sales }: Props) {
             <h3 className="font-medium">
               Country distribution is not available
             </h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-center text-sm text-muted-foreground">
               There are currently no distributions to display. Please check back
               later.
             </p>

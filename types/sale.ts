@@ -55,6 +55,10 @@ export interface OneTimeSale {
   reviews_count: number;
   average_rating: number;
   quantity: number;
+  affiliate?: {
+    email: string;
+    amount: number;
+  } | null;
 }
 
 export interface SubscriptionSale extends OneTimeSale {

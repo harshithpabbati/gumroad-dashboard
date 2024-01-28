@@ -276,3 +276,14 @@ export function getCountryDistribution(sales: SubscriptionSale[]) {
 
   return Object.entries(metrics).map(([name, value]) => ({ name, value }));
 }
+
+export function getAffiliateDistribution(sales: Sale[]) {
+  const metrics: Record<string, number> = {};
+
+  sales.forEach((item) => {
+    const key = item?.affiliate ? 'affiliate' : 'non-affiliate';
+    metrics[key] = (metrics[key] || 0) + 1;
+  });
+
+  return Object.entries(metrics).map(([name, value]) => ({ name, value }));
+}

@@ -19,7 +19,7 @@ export interface Product {
   require_shipping: boolean;
   custom_receipt: string;
   custom_permalink: string;
-  subscription_duration: string;
+  subscription_duration: string | null;
   id: string;
   url: string | null;
   price: number;

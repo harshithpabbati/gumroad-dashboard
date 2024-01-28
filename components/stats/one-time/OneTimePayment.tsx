@@ -1,23 +1,21 @@
 import { Sale } from '@/types/sale';
 import {
+  AffiliateDistribution,
   CountryDistribution,
-  MembershipMetrics,
-  SubscribersDistribution,
 } from '@/components/stats/distributions';
-import { Overview } from '@/components/stats/Overview';
+import { Overview } from '@/components/stats/one-time/Overview';
 import { Volume } from '@/components/stats/Volume';
 
 interface Props {
   sales: Sale[];
 }
-export function SubscriptionStats({ sales }: Props) {
+export function OneTimePayment({ sales }: Props) {
   return (
     <>
       <Overview sales={sales} />
       <Volume sales={sales} className="mt-8" />
-      <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <SubscribersDistribution sales={sales} />
-        <MembershipMetrics sales={sales} />
+      <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+        <AffiliateDistribution sales={sales} />
         <CountryDistribution sales={sales} />
       </div>
     </>

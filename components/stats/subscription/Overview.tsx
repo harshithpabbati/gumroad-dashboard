@@ -87,7 +87,7 @@ export function Overview({ sales }: { sales: Sale[] }) {
           </CardDescription>
         </CardHeader>
         <CardContent className="h-[80px]">
-          <BarGraph data={mrr} prefix="$" />
+          <BarGraph data={mrr} dataKey="revenue" prefix="$" />
         </CardContent>
       </Card>
       <Card>

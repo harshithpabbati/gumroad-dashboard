@@ -12,15 +12,13 @@ import {
 import { Tooltip as CustomTooltip } from '@/components/stats/graphs/Tooltip';
 
 interface Props {
-  data: {
-    name: string;
-    revenue: number;
-  }[];
+  data: Record<string, string | number>[];
+  dataKey: string;
   prefix?: string;
   suffix?: string;
 }
 
-export function BarGraph({ data, prefix, suffix }: Props) {
+export function BarGraph({ data, dataKey, prefix, suffix }: Props) {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart
@@ -37,7 +35,7 @@ export function BarGraph({ data, prefix, suffix }: Props) {
         <Bar
           type="monotone"
           strokeWidth={2}
-          dataKey="revenue"
+          dataKey={dataKey}
           stroke="currentColor"
           fill="currentColor"
           className="text-primary"

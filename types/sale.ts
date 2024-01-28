@@ -77,4 +77,4 @@ export interface SubscriptionSale extends OneTimeSale {
 
 export type Sale = OneTimeSale | SubscriptionSale;
 
-export type TimePeriod = 'day' | 'week' | 'month' | 'year';
+export type TimePeriod = 'week' | 'month' | 'quarter' | 'half-year' | 'year';

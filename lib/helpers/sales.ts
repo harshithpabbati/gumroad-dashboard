@@ -11,18 +11,24 @@ export function calculateSalesVolume(
   const salesData: { [key: string]: { gross: number; net: number } } = {};
   dates.forEach((date) => {
     switch (period) {
-      case 'week':
-        salesData[date.toLocaleDateString('en-US', { weekday: 'short' })] = {
-          gross: 0,
-          net: 0,
-        };
-        break;
-      case 'month':
+      case 'year':
+      case 'half-year':
         salesData[
           date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' })
         ] = { gross: 0, net: 0 };
         break;
+      case 'quarter':
+      case 'month':
+      case 'week':
       default:
+        salesData[
+          date.toLocaleDateString('en-US', {
+            dateStyle: 'medium',
+          })
+        ] = {
+          gross: 0,
+          net: 0,
+        };
         break;
     }
   });
@@ -32,15 +38,20 @@ export function calculateSalesVolume(
     if (checkIfDateInRange(period, date)) {
       let key;
       switch (period) {
-        case 'month':
+        case 'year':
+        case 'half-year':
           key = date.toLocaleDateString('en-US', {
             month: 'short',
             year: '2-digit',
           });
           break;
+        case 'quarter':
+        case 'month':
         case 'week':
         default:
-          key = date.toLocaleDateString('en-US', { weekday: 'short' });
+          key = date.toLocaleDateString('en-US', {
+            dateStyle: 'medium',
+          });
           break;
       }
       salesData[key].gross += sale.price;
@@ -56,7 +67,7 @@ export function calculateSalesVolume(
 }
 
 export function calculateTotalRevenue(sales: Sale[]) {
-  const dates = generateDateRanges('month');
+  const dates = generateDateRanges('year');
 
   let totalRevenue = sales
     .filter((sale) => {

@@ -5,7 +5,7 @@ export function calculateAggregatedData<T>(
   aggregationFunction: (sale: T) => boolean,
   valueExtractor: (sale: T) => number
 ): { name: string; value: number }[] {
-  const dates = generateDateRanges('month');
+  const dates = generateDateRanges('year');
   const aggregatedData: { [key: string]: number } = {};
 
   dates.forEach((date) => {

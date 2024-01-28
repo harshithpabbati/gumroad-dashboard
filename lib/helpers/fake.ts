@@ -61,7 +61,7 @@ const MEMBERSHIPS = ['monthly', 'quarterly', 'half-yearly', 'annual'];
 export function getFakeSales(): Sale[] {
   const sales: Sale[] = [];
   const startDate = new Date();
-  startDate.setDate(startDate.getDate() - 365);
+  startDate.setDate(startDate.getDate() - 364);
 
   for (let i = 0; i < 1000; i++) {
     const randomDate = new Date(startDate);

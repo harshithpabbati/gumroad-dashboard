@@ -63,8 +63,11 @@ export function Volume({
               <SelectGroup>
                 <SelectLabel>Time Period</SelectLabel>
                 <SelectSeparator />
-                <SelectItem value="week">Weekly</SelectItem>
-                <SelectItem value="month">Monthly</SelectItem>
+                <SelectItem value="week">Last 7 days</SelectItem>
+                <SelectItem value="month">Last 30 days</SelectItem>
+                <SelectItem value="quarter">Last 90 days</SelectItem>
+                <SelectItem value="half-year">Last 180 days</SelectItem>
+                <SelectItem value="year">Last 365 days</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -92,8 +95,11 @@ export function Volume({
               <SelectGroup>
                 <SelectLabel>Time Period</SelectLabel>
                 <SelectSeparator />
-                <SelectItem value="week">Weekly</SelectItem>
-                <SelectItem value="month">Monthly</SelectItem>
+                <SelectItem value="week">Last 7 days</SelectItem>
+                <SelectItem value="month">Last 30 days</SelectItem>
+                <SelectItem value="quarter">Last 90 days</SelectItem>
+                <SelectItem value="half-year">Last 180 days</SelectItem>
+                <SelectItem value="year">Last 365 days</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>

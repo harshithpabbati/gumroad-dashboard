@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Activity, BookmarkX, DollarSign, Receipt } from 'lucide-react';
 
-import { Sale, SubscriptionSale } from '@/types/sale';
+import { Sale } from '@/types/sale';
 import {
   calculateChurn,
   calculateMRR,
@@ -24,36 +24,6 @@ export function Overview({ sales }: { sales: Sale[] }) {
     () => sales.reduce((acc: number, sub) => acc + sub.price, 0),
     [sales]
   );
-  const activeSubscriptions = useMemo(
-    () =>
-      (sales as SubscriptionSale[]).filter(
-        (s) => !(s.cancelled || s.dead || s.ended)
-      ),
-    [sales]
-  );
-  const currentMRR = useMemo(
-    () =>
-      activeSubscriptions
-        .filter((s) => {
-          const date = new Date();
-          const saleDate = new Date(s.created_at);
-          return (
-            saleDate.getMonth() === date.getMonth() &&
-            saleDate.getFullYear() === date.getFullYear()
-          );
-        })
-        .reduce((acc: number, sub) => acc + sub.price, 0),
-    [activeSubscriptions]
-  );
-  const churnRate = useMemo(() => {
-    const cancelledSubscriptions = (sales as SubscriptionSale[]).filter(
-      (s) => s.cancelled || s.dead || s.ended
-    );
-    const value = Math.round(
-      (cancelledSubscriptions.length / sales.length) * 100
-    );
-    return isNaN(value) ? 0 : value;
-  }, [sales]);
 
   const revenue = useMemo(() => calculateTotalRevenue(sales), [sales]);
   const mrr = useMemo(() => calculateMRR(sales), [sales]);
@@ -73,7 +43,7 @@ export function Overview({ sales }: { sales: Sale[] }) {
           </CardDescription>
         </CardHeader>
         <CardContent className="h-[80px]">
-          <LineGraph data={revenue} dataKey="revenue" prefix="$" />
+          <LineGraph data={revenue} dataKey="value" prefix="$" />
         </CardContent>
       </Card>
       <Card>
@@ -83,11 +53,11 @@ export function Overview({ sales }: { sales: Sale[] }) {
             <Receipt className="size-4 text-muted-foreground" />
           </div>
           <CardDescription className="text-2xl font-bold">
-            ${currentMRR}
+            ${mrr[mrr.length - 1].value}
           </CardDescription>
         </CardHeader>
         <CardContent className="h-[80px]">
-          <BarGraph data={mrr} dataKey="revenue" prefix="$" />
+          <BarGraph data={mrr} dataKey="value" prefix="$" />
         </CardContent>
       </Card>
       <Card>
@@ -99,13 +69,13 @@ export function Overview({ sales }: { sales: Sale[] }) {
             <Activity className="size-4 text-muted-foreground" />
           </div>
           <CardDescription className="text-2xl font-bold">
-            {activeSubscriptions.length}
+            {subscriptions[subscriptions.length - 1].value}
           </CardDescription>
         </CardHeader>
         <CardContent className="h-[80px]">
           <AreaGraph
             data={subscriptions}
-            dataKey="subscriptions"
+            dataKey="value"
             height="100%"
             hideAxis
           />
@@ -118,11 +88,11 @@ export function Overview({ sales }: { sales: Sale[] }) {
             <BookmarkX className="size-4 text-muted-foreground" />
           </div>
           <CardDescription className="text-2xl font-bold">
-            {churnRate}%
+            {churn[churn.length - 1].value}%
           </CardDescription>
         </CardHeader>
         <CardContent className="h-[80px]">
-          <LineGraph suffix="%" data={churn} dataKey="churn" />
+          <LineGraph suffix="%" data={churn} dataKey="value" />
         </CardContent>
       </Card>
     </div>

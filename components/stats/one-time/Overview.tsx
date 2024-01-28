@@ -22,10 +22,6 @@ export function Overview({ sales }: { sales: Sale[] }) {
     () => sales.reduce((acc: number, sub) => acc + sub.price, 0),
     [sales]
   );
-  const averageOrderValue = useMemo(
-    () => Math.round(totalRevenue / (sales.length || 1)),
-    [sales.length, totalRevenue]
-  );
 
   const revenue = useMemo(() => calculateTotalRevenue(sales), [sales]);
   const monthlySales = useMemo(() => calculateSales(sales), [sales]);
@@ -47,7 +43,7 @@ export function Overview({ sales }: { sales: Sale[] }) {
           </CardDescription>
         </CardHeader>
         <CardContent className="h-[80px]">
-          <LineGraph data={revenue} dataKey="revenue" prefix="$" />
+          <LineGraph data={revenue} dataKey="value" prefix="$" />
         </CardContent>
       </Card>
       <Card>
@@ -57,7 +53,7 @@ export function Overview({ sales }: { sales: Sale[] }) {
             <Activity className="size-4 text-muted-foreground" />
           </div>
           <CardDescription className="text-2xl font-bold">
-            {sales.length}
+            {monthlySales[monthlySales.length - 1].value}
           </CardDescription>
         </CardHeader>
         <CardContent className="h-[80px]">
@@ -65,7 +61,7 @@ export function Overview({ sales }: { sales: Sale[] }) {
             height="100%"
             hideAxis
             data={monthlySales}
-            dataKey="sales"
+            dataKey="value"
           />
         </CardContent>
       </Card>
@@ -78,14 +74,18 @@ export function Overview({ sales }: { sales: Sale[] }) {
             <Receipt className="size-4 text-muted-foreground" />
           </div>
           <CardDescription className="text-2xl font-bold">
-            ${averageOrderValue}
+            $
+            {
+              monthlyAverageOrderValue[monthlyAverageOrderValue.length - 1]
+                .value
+            }
           </CardDescription>
         </CardHeader>
         <CardContent className="h-[80px]">
           <LineGraph
             data={monthlyAverageOrderValue}
             prefix="$"
-            dataKey="revenue"
+            dataKey="value"
           />
         </CardContent>
       </Card>

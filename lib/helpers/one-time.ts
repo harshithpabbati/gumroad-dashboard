@@ -1,21 +1,10 @@
 import { Sale } from '@/types/sale';
+import { generateDateRanges } from '@/lib/helpers/utils';
 
 export function calculateSales(
   sales: Sale[]
 ): { name: string; sales: number }[] {
-  const startDate = new Date();
-  startDate.setMonth(startDate.getMonth() - 11);
-
-  let dates: Date[] = [];
-  const currentDate = new Date();
-  for (
-    let d = new Date(currentDate);
-    d >= startDate;
-    d.setMonth(d.getMonth() - 1)
-  ) {
-    dates.push(new Date(d));
-  }
-  dates = dates.reverse();
+  const dates = generateDateRanges('month');
 
   const salesData: { [key: string]: number } = {};
   dates.forEach((date) => {
@@ -39,19 +28,7 @@ export function calculateSales(
 export function calculateAverageOrderValue(
   sales: Sale[]
 ): { name: string; revenue: number }[] {
-  const startDate = new Date();
-  startDate.setMonth(startDate.getMonth() - 11);
-
-  let dates: Date[] = [];
-  const currentDate = new Date();
-  for (
-    let d = new Date(currentDate);
-    d >= startDate;
-    d.setMonth(d.getMonth() - 1)
-  ) {
-    dates.push(new Date(d));
-  }
-  dates = dates.reverse();
+  const dates = generateDateRanges('month');
 
   const salesData: { [key: string]: number } = {};
   dates.forEach((date) => {

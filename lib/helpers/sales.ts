@@ -1,33 +1,11 @@
 import { Sale, SubscriptionSale, TimePeriod } from '@/types/sale';
-import { getFakeSales } from '@/lib/helpers/fake';
+import { generateDateRanges } from '@/lib/helpers/utils';
 
 export function calculateSalesVolume(
   sales: Sale[],
   period: TimePeriod = 'week'
 ): { name: string; grossRevenue: number; netRevenue: number }[] {
-  const startDate = new Date();
-  switch (period) {
-    case 'month':
-      startDate.setMonth(startDate.getMonth() - 11);
-      break;
-    case 'week':
-    default:
-      startDate.setDate(startDate.getDate() - 7);
-      break;
-  }
-
-  let dates: Date[] = [];
-  const currentDate = new Date();
-  for (
-    let d = new Date(currentDate);
-    d >= startDate;
-    period === 'week'
-      ? d.setDate(d.getDate() - 1)
-      : d.setMonth(d.getMonth() - 1)
-  ) {
-    dates.push(new Date(d));
-  }
-  dates = dates.reverse();
+  const dates = generateDateRanges(period);
 
   const salesData: { [key: string]: { gross: number; net: number } } = {};
   dates.forEach((date) => {
@@ -50,7 +28,7 @@ export function calculateSalesVolume(
 
   sales.forEach((sale) => {
     const date = new Date(sale.created_at);
-    if (date >= startDate && date <= currentDate) {
+    if (date >= dates[0] && date <= dates[dates.length - 1]) {
       let key;
       switch (period) {
         case 'month':
@@ -79,27 +57,15 @@ export function calculateSalesVolume(
 export function calculateTotalRevenue(
   sales: Sale[]
 ): { name: string; revenue: number }[] {
-  const startDate = new Date();
-  startDate.setMonth(startDate.getMonth() - 11);
-
-  let dates: Date[] = [];
-  const currentDate = new Date();
-  for (
-    let d = new Date(currentDate);
-    d >= startDate;
-    d.setMonth(d.getMonth() - 1)
-  ) {
-    dates.push(new Date(d));
-  }
-  dates = dates.reverse();
+  const dates = generateDateRanges('month');
 
   const salesData: { [key: string]: number } = {};
   let totalRevenue = sales
     .filter((sale) => {
       const saleDate = new Date(sale.created_at);
       return (
-        saleDate.getMonth() < startDate.getMonth() &&
-        saleDate.getFullYear() < startDate.getFullYear()
+        saleDate.getMonth() < dates[0].getMonth() &&
+        saleDate.getFullYear() < dates[0].getFullYear()
       );
     })
     .reduce((total, sale) => total + sale.price, 0);
@@ -128,19 +94,7 @@ export function calculateTotalRevenue(
 export function calculateMRR(
   sales: Sale[]
 ): { name: string; revenue: number }[] {
-  const startDate = new Date();
-  startDate.setMonth(startDate.getMonth() - 11);
-
-  let dates: Date[] = [];
-  const currentDate = new Date();
-  for (
-    let d = new Date(currentDate);
-    d >= startDate;
-    d.setMonth(d.getMonth() - 1)
-  ) {
-    dates.push(new Date(d));
-  }
-  dates = dates.reverse();
+  const dates = generateDateRanges('month');
 
   const salesData: { [key: string]: number } = {};
   dates.forEach((date) => {
@@ -167,19 +121,7 @@ export function calculateMRR(
 export function calculateSubscriptions(
   sales: Sale[]
 ): { name: string; subscriptions: number }[] {
-  const startDate = new Date();
-  startDate.setMonth(startDate.getMonth() - 11);
-
-  let dates: Date[] = [];
-  const currentDate = new Date();
-  for (
-    let d = new Date(currentDate);
-    d >= startDate;
-    d.setMonth(d.getMonth() - 1)
-  ) {
-    dates.push(new Date(d));
-  }
-  dates = dates.reverse();
+  const dates = generateDateRanges('month');
 
   const salesData: { [key: string]: number } = {};
   dates.forEach((date) => {
@@ -205,19 +147,7 @@ export function calculateSubscriptions(
 export function calculateChurn(
   sales: Sale[]
 ): { name: string; churn: number }[] {
-  const startDate = new Date();
-  startDate.setMonth(startDate.getMonth() - 11);
-
-  let dates: Date[] = [];
-  const currentDate = new Date();
-  for (
-    let d = new Date(currentDate);
-    d >= startDate;
-    d.setMonth(d.getMonth() - 1)
-  ) {
-    dates.push(new Date(d));
-  }
-  dates = dates.reverse();
+  const dates = generateDateRanges('month');
 
   const salesData: { [key: string]: number } = {};
   dates.forEach((date) => {

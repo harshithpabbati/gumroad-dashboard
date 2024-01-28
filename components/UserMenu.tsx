@@ -28,9 +28,10 @@ export function UserMenu({ className }: { className?: string }) {
           className={cn('relative size-9 rounded-full', className)}
         >
           <Avatar className="size-9 select-none">
-            <AvatarImage>
-              {getGravatar(data?.user?.email as string)}
-            </AvatarImage>
+            <AvatarImage
+              src={getGravatar(data?.user?.email as string)}
+              alt={data?.user?.name ?? ''}
+            />
             <AvatarFallback>
               {getNameInitials(data?.user?.name as string)}
             </AvatarFallback>
@@ -43,9 +44,7 @@ export function UserMenu({ className }: { className?: string }) {
             <p className="text-sm font-medium leading-none">
               {data?.user?.name}
             </p>
-            <p className="text-xs leading-none text-muted-foreground">
-              {data?.user?.email}
-            </p>
+            <p className="text-xs leading-none">{data?.user?.email}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

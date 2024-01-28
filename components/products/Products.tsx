@@ -48,6 +48,7 @@ import {
 
 export const columns: ColumnDef<Product>[] = [
   {
+    id: 'Name',
     accessorKey: 'name',
     header: ({ column }) => {
       return (
@@ -66,61 +67,57 @@ export const columns: ColumnDef<Product>[] = [
     },
     cell: ({ row }) => (
       <div className="flex flex-col">
-        <p className="text-lg font-semibold">{row.getValue('name')}</p>
-        <p className="text-xs text-foreground underline">
+        <p className="text-lg font-semibold">{row.original.name}</p>
+        <p className="text-sm text-foreground underline">
           {row.original.short_url}
         </p>
       </div>
     ),
   },
   {
-    accessorKey: 'custom_summary',
-    header: () => <div>Summary</div>,
-    cell: ({ row }) => <div>{row.getValue('custom_summary')}</div>,
-  },
-  {
+    id: 'Type',
     accessorKey: 'is_tiered_membership',
-    header: () => <div>Type</div>,
+    header: 'Type',
     cell: ({ row }) => (
       <div>
-        {row.getValue('is_tiered_membership')
+        {row.original.is_tiered_membership
           ? 'Subscription'
           : 'One-time payment'}
       </div>
     ),
   },
   {
+    id: 'Sales',
     accessorKey: 'sales_count',
-    header: () => <div>Sales</div>,
-    cell: ({ row }) => (
-      <div>{row.getValue('sales_count') ?? 'Summary not found'}</div>
-    ),
+    header: 'Sales',
+    cell: ({ row }) => <div>{row.original.sales_count}</div>,
   },
   {
+    id: 'Revenue',
     accessorKey: 'sales_usd_cents',
-    header: () => <div>Revenue</div>,
+    header: 'Revenue',
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue('sales_usd_cents'));
-
       const formatted = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
-      }).format(amount);
+      }).format(row.original.sales_usd_cents);
 
       return <div>{formatted}</div>;
     },
   },
   {
+    id: 'Price',
     accessorKey: 'formatted_price',
-    header: () => <div>Price</div>,
-    cell: ({ row }) => <div>{row.getValue('formatted_price')}</div>,
+    header: 'Price',
+    cell: ({ row }) => <div>{row.original.formatted_price}</div>,
   },
   {
+    id: 'Published',
     accessorKey: 'published',
-    header: () => <div>Published</div>,
+    header: 'Published',
     cell: ({ row }) => (
       <div className="flex items-center">
-        {row.getValue('published') ? (
+        {row.original.published ? (
           <>
             <CheckIcon className="mr-1 size-4" />
             Yes
@@ -160,13 +157,13 @@ export function Products({ products }: { products: Product[] }) {
   });
 
   return (
-    <Card className="w-full rounded">
+    <Card className="w-full">
       <CardHeader className="flex flex-col items-center p-4 md:flex-row">
         <Input
           placeholder="Filter by product"
-          value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+          value={(table.getColumn('Name')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
-            table.getColumn('name')?.setFilterValue(event.target.value)
+            table.getColumn('Name')?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

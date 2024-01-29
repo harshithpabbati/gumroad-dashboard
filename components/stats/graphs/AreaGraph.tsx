@@ -48,12 +48,22 @@ export function AreaGraph({
           dataKey="name"
         />
         <YAxis
+          width={40}
           stroke="currentColor"
           fontSize={12}
           tickLine={false}
           axisLine={false}
           hide={hideAxis}
-          tickFormatter={(value) => `$${value}`}
+          tickFormatter={(value) =>
+            new Intl.NumberFormat('en-US', {
+              style: 'currency',
+              currency: 'USD',
+              unitDisplay: 'short',
+              maximumFractionDigits: 0,
+              notation: 'compact',
+              compactDisplay: 'short',
+            }).format(value)
+          }
         />
         <Area
           fillOpacity={1}
